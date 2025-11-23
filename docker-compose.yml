@@ -1,0 +1,85 @@
+services:
+    # Application Laravel
+    app:
+        build:
+            context: .
+            args:
+                - APP_ENV=${APP_ENV:-production}
+        container_name: laravel12-app-${APP_ENV:-production}
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+            - ./storage:/var/www/html/storage
+            - ./bootstrap/cache:/var/www/html/bootstrap/cache
+        environment:
+            - APP_ENV=${APP_ENV:-production}
+            - APP_DEBUG=${APP_DEBUG:-false}
+        env_file:
+            - .env
+        networks:
+            - laravel12-network
+        depends_on:
+            - db
+
+    # Base de données MySQL - UTILISE AlmaLinux MySQL
+    db:
+        image: mysql:8.4
+        container_name: laravel12-db-${APP_ENV:-production}
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+            MYSQL_DATABASE: ${DB_DATABASE:-laravel12}
+            MYSQL_USER: ${DB_USERNAME:-laravel12}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-laravel12}
+        volumes:
+            - db_data_laravel12:/var/lib/mysql
+        networks:
+            - laravel12-network
+
+    # Serveur Web Nginx - IMAGE OFFICIELLE NGINX (pas Alpine)
+    nginx:
+        image: nginx:latest
+        container_name: laravel12-nginx-${APP_ENV:-production}
+        restart: unless-stopped
+        ports:
+            - "${NGINX_PORT:-80}:80"
+        volumes:
+            - .:/var/www/html
+            - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - laravel12-network
+
+    # Service phpMyAdmin pour gérer la base de données
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin               # Image officielle phpMyAdmin
+        container_name: laravel12-pma-${APP_ENV:-production}                 # Nom du conteneur
+        restart: unless-stopped                    # Redémarre automatiquement si une erreur survient
+        ports:
+            - "${PMA_LOCAL_PORT:-8082}:80"     # Accès via http://localhost:8080
+        environment:
+            PMA_HOST: db                    # Indique à phpMyAdmin de se connecter au conteneur nommé "db"
+            PMA_USER: ${PMA_USER:-root}     # Nom d'utilisateur par défaut pour la connexion
+            PMA_PASSWORD: ${PMA_PASSWORD:-root} # Mot de passe associé à l’utilisateur root
+        depends_on:
+            - db                             # S'assure que MySQL est lancé avant phpMyAdmin
+        networks:
+            - laravel12-network                 # Connecte phpMyAdmin au réseau partagé
+
+    # Redis pour cache et queues
+    redis:
+        image: redis:7.2-alpine
+        container_name: laravel12-redis-${APP_ENV:-production}
+        restart: unless-stopped
+        networks:
+            - laravel12-network
+
+networks:
+    laravel12-network:
+        driver: bridge
+
+volumes:
+  db_data_laravel12:
+        driver: local

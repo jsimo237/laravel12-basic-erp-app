@@ -12,6 +12,23 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+
+        $middleware->append([
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
+
+        $middleware->validateCsrfTokens(except: []);
+
+
+        $middleware->alias( [
+//            'auth' => \App\Modules\SecurityManagement\Middlewares\Authenticate::class,
+//            'guest' => \App\Modules\SecurityManagement\Middlewares\RedirectIfAuthenticated::class,
+//            'signed' => \App\Modules\SecurityManagement\Middlewares\ValidateSignature::class,
+//            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+//            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+//            'role-or-permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

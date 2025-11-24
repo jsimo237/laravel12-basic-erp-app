@@ -4,6 +4,7 @@ namespace App\Modules\SalesManagement\Interfaces;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -17,7 +18,7 @@ interface BaseInvoiceContract
 
     public function refreshInvoice() : void;
 
-    public function payments() : HasMany;
+    public function payments() : HasMany|HasManyThrough;
 
     public function order() : BelongsTo | BaseOrderContract;
 

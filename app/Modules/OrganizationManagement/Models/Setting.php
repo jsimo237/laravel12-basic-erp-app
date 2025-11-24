@@ -2,6 +2,7 @@
 
 namespace App\Modules\OrganizationManagement\Models;
 
+use App\Modules\UsesUuidV6;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,8 +19,11 @@ use App\Modules\LocalizationManagement\Constants\SettingsKeys;
  */
 class Setting extends BaseModel {
 
-    protected $table = "organization_mgt__settings";
+    use UsesUuidV6;
 
+    protected $table = "organization_mgt__settings";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     const TYPE_TEXT = "text";
     const TYPE_LONG_TEXT = "long-text";

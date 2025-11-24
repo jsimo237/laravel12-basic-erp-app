@@ -2,7 +2,7 @@
 
 namespace App\Modules\OrganizationManagement\Models;
 
-
+use App\Modules\UsesUuidV6;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use App\Modules\MediableModel;
@@ -22,9 +22,11 @@ use App\Modules\SecurityManagement\Traits\HasUser;
  */
 class Staff extends MediableModel implements AuthenticatableModelContract {
 
-    use HasUser,Notifiable;
+    use HasUser,Notifiable,UsesUuidV6;
 
     protected $table = "organization_mgt__staffs";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     //RELATIONS
     protected static function newFactory(){

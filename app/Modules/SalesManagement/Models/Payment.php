@@ -2,8 +2,6 @@
 
 namespace App\Modules\SalesManagement\Models;
 
-
-
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use App\Modules\SalesManagement\Interfaces\BaseInvoiceContract;
@@ -15,6 +13,8 @@ class Payment extends BasePayment
 {
 
     protected $table = "sales_mgt__payments";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'paid_at',

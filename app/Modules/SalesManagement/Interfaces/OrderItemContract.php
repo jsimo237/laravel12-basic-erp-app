@@ -16,6 +16,7 @@ use App\Modules\OrganizationManagement\Models\Organization;
  * @property string note
  * @property float discount
  * @property array<string, mixed> taxes
+ * @property string|int order_id
  * @property BaseOrderContract order
  * @property BaseInvoiceContract invoice
  * @property BaseInvoiceContract invoiceable

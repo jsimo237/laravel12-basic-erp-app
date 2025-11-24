@@ -3,6 +3,7 @@
 namespace App\Modules\SalesManagement\Models;
 
 
+use App\Modules\UsesUuidV6;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\BaseModel;
@@ -14,9 +15,11 @@ use App\Modules\BaseModel;
  */
 class TaxGroup  extends BaseModel
 {
-
+    use UsesUuidV6;
 
     protected $table = "sales_mgt__taxe_groups";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'name',

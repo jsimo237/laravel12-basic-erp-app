@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Modules\Authorable;
 use App\Modules\CoresManagement\Models\Traits\Activable;
 use App\Modules\CoresManagement\Models\Traits\Auditable;
-use App\Modules\OrganizationManagement\Interfaces\OrganizationScopable;
+use App\Modules\OrganizationManagement\Interfaces\BelongsToOrganization;
 use App\Modules\OrganizationManagement\Models\Organization;
 use App\Modules\OrganizationManagement\Models\Traits\HasOrganization;
 use App\Modules\SecurityManagement\Models\Observers\RoleObserver;
@@ -22,7 +22,7 @@ use Spatie\Permission\Models\Role as SpatieRole;
  * @property Permission[] permissions
  * @property Organization oganization
  */
-class Role extends SpatieRole implements OrganizationScopable {
+class Role extends SpatieRole implements BelongsToOrganization {
 
     use HasFactory,
         SoftDeletes,

@@ -3,6 +3,7 @@
 namespace App\Modules\OrganizationManagement\Models;
 
 
+use App\Modules\UsesUuidV6;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,9 +45,11 @@ class Organization extends Model implements SpatieHasMedia {
 
     use Notifiable;
 
-    use InteractsWithMedia,Mediable;
+    use InteractsWithMedia,Mediable,UsesUuidV6;
 
     protected $table = "organization_mgt__organizations";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $casts = [
      //   'taxes' => "array",

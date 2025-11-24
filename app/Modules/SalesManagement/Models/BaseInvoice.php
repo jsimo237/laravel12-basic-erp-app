@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use App\Modules\BaseModel;
@@ -96,7 +97,7 @@ abstract class BaseInvoice extends BaseModel implements
 
     abstract public function items() : HasMany;
 
-    abstract public function payments() : HasMany;
+    abstract public function payments() : HasMany|HasManyThrough;
 
     abstract public function order() : BelongsTo;
 

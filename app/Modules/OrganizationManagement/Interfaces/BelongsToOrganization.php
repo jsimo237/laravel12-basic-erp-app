@@ -15,7 +15,7 @@ use App\Modules\OrganizationManagement\Models\Organization;
  * @property Organization organization
  * @property string|int|null organization_id
  */
-interface OrganizationScopable
+interface BelongsToOrganization
 {
 
     /**

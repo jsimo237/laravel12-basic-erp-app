@@ -2,6 +2,7 @@
 
 namespace App\Modules\SecurityManagement\Models;
 
+use App\Modules\UsesUuidV6;
 use DateTime;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +19,7 @@ use App\Modules\CoresManagement\Models\Traits\Activable;
 use App\Modules\CoresManagement\Models\Traits\Auditable;
 use App\Modules\CoresManagement\Models\Traits\InteractWithCommonsScopeFilter;
 use App\Modules\CoresManagement\Models\Traits\Mediable;
-use App\Modules\OrganizationManagement\Interfaces\OrganizationScopable;
+use App\Modules\OrganizationManagement\Interfaces\BelongsToOrganization;
 use App\Modules\OrganizationManagement\Models\Staff;
 use App\Modules\OrganizationManagement\Models\Traits\HasOrganization;
 use App\Modules\SecurityManagement\Interfaces\AuthenticatableModelContract;
@@ -53,12 +54,12 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null address
  * @property string|DateTime|null email_verified_at
  * @property string|DateTime|null phone_verified_at
- * @property Collection<Role> roles
- * @property Collection<Permission> permissions
+ * @property-read  Collection<Role> roles
+ * @property-read  Collection<Permission> permissions
  * @property Collection<Media> media
  * @property AuthenticatableModelContract entity
  */
-class User extends Authenticatable implements SpatieHasMedia,OrganizationScopable {
+class User extends Authenticatable implements SpatieHasMedia,BelongsToOrganization {
 
    use  HasFactory,SoftDeletes,HasAuthTokens,
         SpatieHasRoles,SpatieHasPermissions,
@@ -75,10 +76,12 @@ class User extends Authenticatable implements SpatieHasMedia,OrganizationScopabl
     use UserInteractWithSomeEntity;
 //    use TwoFactorAuthenticatable;
 //    use HasProfilePhoto;
+    use UsesUuidV6;
 
 
     protected $table = "security_mgt__users";
-   // protected string $primaryKey = "id";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     const MORPH_ID_COLUMN = "entity_id";
     const MORPH_TYPE_COLUMN = "entity_type";
@@ -263,7 +266,7 @@ class User extends Authenticatable implements SpatieHasMedia,OrganizationScopabl
             return $this->can($permission);
         }
 
-        if ($scopable instanceof OrganizationScopable) {
+        if ($scopable instanceof BelongsToOrganization) {
 
             if (filled($this->organization) && filled($scopable?->getOrganization())) {
                 if ($this->organization->is($scopable->getOrganization())) {

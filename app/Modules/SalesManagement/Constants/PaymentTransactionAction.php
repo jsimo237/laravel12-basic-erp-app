@@ -2,7 +2,7 @@
 
 namespace App\Modules\SalesManagement\Constants;
 
-enum BalanceHistoryAction : string
+enum PaymentTransactionAction : string
 {
 
     case CREDIT = 'CREDIT'; //

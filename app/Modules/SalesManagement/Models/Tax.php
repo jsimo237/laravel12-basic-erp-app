@@ -6,6 +6,7 @@ namespace App\Modules\SalesManagement\Models;
 use App\Modules\BaseModel;
 use App\Modules\CoresManagement\Models\Traits\Activable;
 use App\Modules\SalesManagement\Constants\TaxeType;
+use App\Modules\UsesUuidV6;
 use App\Support\Contracts\EventNotifiableContract;
 
 /**
@@ -24,7 +25,8 @@ use App\Support\Contracts\EventNotifiableContract;
 class Tax extends BaseModel implements EventNotifiableContract
 {
 
-    use  Activable;
+    use Activable;
+    use UsesUuidV6;
 
     const TAX_CALCULATION_TYPE_AMOUNT = 'AMOUNT';
 
@@ -40,6 +42,8 @@ class Tax extends BaseModel implements EventNotifiableContract
 
 
     protected $table = "sales_mgt__taxes";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'active',

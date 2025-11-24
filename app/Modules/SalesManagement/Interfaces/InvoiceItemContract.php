@@ -3,6 +3,7 @@
 namespace App\Modules\SalesManagement\Interfaces;
 
 
+use DateTime;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
@@ -15,6 +16,8 @@ use App\Modules\OrganizationManagement\Models\Organization;
  * @property float unit_price
  * @property string note
  * @property float discount
+ * @property DateTime|null cancelled_at
+ * @property string|null cancel_reason
  * @property array<string, mixed> taxes
  * @property BaseOrderContract order
  * @property BaseInvoiceContract invoice
@@ -45,6 +48,9 @@ interface InvoiceItemContract
     public function invoiceable() : MorphTo;
 
     public function order () : HasOneThrough;
+
+    public function handleItemCancelled() : void;
+    public function handleItemValidated() : void;
 
 
 }

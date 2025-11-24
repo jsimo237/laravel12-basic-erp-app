@@ -2,6 +2,7 @@
 
 namespace App\Modules\SalesManagement\Models;
 
+use App\Modules\UsesUuidV6;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Modules\SalesManagement\Factories\CustomerFactory;
 use App\Modules\SecurityManagement\Interfaces\AuthenticatableModelContract;
@@ -19,8 +20,11 @@ use App\Modules\SecurityManagement\Traits\HasUser;
 class Customer extends BaseCustomer {
 
     use HasUser;
+    use UsesUuidV6;
 
     protected $table = "sales_mgt__customers";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     //RELATIONS
 

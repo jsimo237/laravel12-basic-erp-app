@@ -41,9 +41,9 @@ trait WithOrderCapacities
     /**
      * Get the order total amount
      *
-     * @return float|int
+     * @return float
      */
-    public function getTotalAmount(): float|int
+    public function getTotalAmount(): float
     {
         return $this->getSubTotalAmount()
                 + $this->getTaxes()['total']

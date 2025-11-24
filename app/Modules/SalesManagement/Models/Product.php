@@ -6,6 +6,7 @@ use App\Modules\BaseModel;
 use App\Modules\SalesManagement\Interfaces\BillableItem;
 use App\Modules\SalesManagement\Traits\InteractWithInvoiceItemsCapacities;
 use App\Modules\SalesManagement\Traits\InteractWithOrdertemsCapacities;
+use App\Modules\UsesUuidV6;
 
 /**
  * @property string|int id
@@ -18,8 +19,11 @@ class Product extends BaseModel implements BillableItem
 {
     use InteractWithInvoiceItemsCapacities,
         InteractWithOrdertemsCapacities;
+    use UsesUuidV6;
 
     protected $table = "sales_mgt__products";
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     //
     public function getObjectName(): string

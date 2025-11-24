@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Modules\CoresManagement\Models\Traits\Auditable;
 use App\Modules\CoresManagement\Models\Traits\InteractWithCommonsScopeFilter;
-use App\Modules\OrganizationManagement\Interfaces\OrganizationScopable;
+use App\Modules\OrganizationManagement\Interfaces\BelongsToOrganization;
 use App\Modules\OrganizationManagement\Models\Traits\HasOrganization;
 use App\Modules\SecurityManagement\Models\User;
 use App\Support\Contracts\EventNotifiableContract;
@@ -32,7 +32,7 @@ use App\Support\Contracts\EventNotifiableContract;
  */
 abstract class BaseModel extends Model
     implements EventNotifiableContract,
-            OrganizationScopable
+            BelongsToOrganization
 {
 
     use HasFactory,

@@ -3,7 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
-use Kirago\BusinessCore\Modules\SecurityManagement\Models\User;
+use App\Modules\SecurityManagement\Models\User;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration  {
     /**
@@ -15,7 +16,7 @@ return new class extends Migration  {
         if(!Schema::hasTable((new User)->getTable())){
                 Schema::create((new User)->getTable(), function (Blueprint $table) {
 
-                    $table->id();
+                   $table->uuid('id')->primary();
 
                     $table->string('firstname',100)
                         ->comment("Le nom");
@@ -57,7 +58,7 @@ return new class extends Migration  {
                     $table->rememberToken()
                         ->comment("le dernier token de réinitialisation du mot de passe");
 
-                    $table->nullableUlidMorphs('entity', uniqid("POLY_INDEX_"));
+                    $table->nullableUuidMorphs('entity', uniqid("POLY_INDEX_"));
 
                     $table->timestamps();
                     $table->softDeletes();

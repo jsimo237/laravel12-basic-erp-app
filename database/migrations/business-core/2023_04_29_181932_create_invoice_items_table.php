@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Invoice;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\InvoiceItem;
+use App\Modules\SalesManagement\Models\Invoice;
+use App\Modules\SalesManagement\Models\InvoiceItem;
 
 return new class extends Migration
 {
@@ -16,7 +16,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create((new InvoiceItem)->getTable(), function (Blueprint $table) {
-            $table->id();
+           $table->uuid('id')->primary();
 
             $table->string('code',60)
                 ->unique(uniqid("UQ_"));
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->decimal('discount',10,4)->default(0);
             $table->json('taxes')->nullable();
 
-            $table->nullableUlidMorphs('invoiceable',uniqid("POLY_INDEX_"));
+            $table->nullableUuidMorphs('invoiceable',uniqid("POLY_INDEX_"));
 
             $table->foreignIdFor(Invoice::class,'invoice_id')
                 ->constrained((new Invoice)->getTable(), (new Invoice)->getKeyName(), uniqid("FK_"))

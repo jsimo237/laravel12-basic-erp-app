@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\Organization;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\Setting;
+use App\Modules\OrganizationManagement\Models\Organization;
+use App\Modules\OrganizationManagement\Models\Setting;
 
 return new class extends Migration {
     /**
@@ -14,7 +14,7 @@ return new class extends Migration {
      */
     public function up(){
         Schema::create((new Setting)->getTable(), function (Blueprint $table) {
-            $table->id();
+           $table->id();
 
             $table->string('key');
             $table->longText('value')->nullable();

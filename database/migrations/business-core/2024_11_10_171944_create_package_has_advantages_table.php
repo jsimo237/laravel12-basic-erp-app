@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists((new PackageHasAdvantage)->getTable());
+      //  Schema::dropIfExists((new PackageHasAdvantage)->getTable());
     }
 };

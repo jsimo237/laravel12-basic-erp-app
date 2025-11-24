@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\OrganizationManagement\Models;
+namespace App\Modules\SalesManagement\Models;
 
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

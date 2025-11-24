@@ -1,16 +1,17 @@
 <?php
 
-namespace Kirago\BusinessCore\Modules\LocalizationManagement\Database\Migrations;
+namespace App\Modules\LocalizationManagement\Database\Migrations;
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\LocalizationManagement\Models\Address;
-use Kirago\BusinessCore\Modules\LocalizationManagement\Models\City;
-use Kirago\BusinessCore\Modules\LocalizationManagement\Models\Country;
-use Kirago\BusinessCore\Modules\LocalizationManagement\Models\Quarter;
-use Kirago\BusinessCore\Modules\LocalizationManagement\Models\State;
-use Kirago\BusinessCore\Modules\LocalizationManagement\Models\Timezone;
+use App\Modules\LocalizationManagement\Models\Address;
+use App\Modules\LocalizationManagement\Models\City;
+use App\Modules\LocalizationManagement\Models\Country;
+use App\Modules\LocalizationManagement\Models\Quarter;
+use App\Modules\LocalizationManagement\Models\State;
+use App\Modules\LocalizationManagement\Models\Timezone;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
 
@@ -30,7 +31,7 @@ return new class extends Migration {
     {
         if (!Schema::hasTable((new Country)->getTable())) {
             Schema::create((new Country)->getTable(), function (Blueprint $table) {
-                $table->id();
+               // $table->uuid('id')->primary();
 
                 $table->string('code',10)->unique(uniqid("UQ_"))
                     ->comment("Le code unique");
@@ -50,7 +51,7 @@ return new class extends Migration {
     {
         if (!Schema::hasTable((new State)->getTable())) {
             Schema::create((new State)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
                 $table->string('name')
                     ->comment("Le nom (ex : 'Littoral')");
                 $table->foreignIdFor(Country::class, "country_id")->nullable()
@@ -72,15 +73,17 @@ return new class extends Migration {
         if (!Schema::hasTable((new City)->getTable())) {
             Schema::create((new City)->getTable(), function (Blueprint $table) {
 
-                $table->id();
+               $table->uuid('id')->primary();
                 $table->string('name')
                     ->comment("Le nom (ex : 'Douala')");
                 $table->foreignIdFor(State::class, State::FK_ID)->nullable()
                     ->constrained((new State)->getTable(), (new State)->getKeyName(), uniqid("FK_"))
                     ->cascadeOnUpdate()->cascadeOnDelete()
                     ->comment("[FK] l'état/région associé");
+
                 $table->boolean('is_active')->default(true)
                     ->comment("Determine si c'est actif");
+
                 $table->nullableTimestamps();
                 $table->softDeletes();
 
@@ -92,7 +95,7 @@ return new class extends Migration {
     {
         if (!Schema::hasTable((new Quarter)->getTable())) {
             Schema::create((new Quarter)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
                 $table->string('name')
                     ->comment("Le nom (ex : 'Ndog-Passi 2')");
                 $table->foreignIdFor(City::class, City::FK_ID)->nullable()
@@ -115,9 +118,9 @@ return new class extends Migration {
 
             Schema::create((new Address)->getTable(), function (Blueprint $table) {
 
-                $table->id();
+               $table->uuid('id')->primary();
 
-                $table->nullableUlidMorphs('addressable',uniqid("POLY_INDEX_"));
+                $table->nullableUuidMorphs('addressable',uniqid("POLY_INDEX_"));
 
                 $table->string('name')->comment("le nom de l'addresse");
 
@@ -173,7 +176,7 @@ return new class extends Migration {
                     ->comment("determine si c'est l'addresse par défaut");
 
 
-               // $table->nullableUlidMorphs('author', uniqid("POLY_INDEX_"));
+               // $table->nullableUuidMorphs('author', uniqid("POLY_INDEX_"));
                 $table->timestamps();
                 $table->softDeletes();
             });
@@ -184,7 +187,7 @@ return new class extends Migration {
     {
         if (!Schema::hasTable((new Timezone)->getTable())) {
             Schema::create((new Timezone)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
                 $table->string('code',100)->unique(uniqid("UQ_"))
                     ->comment("[PK] le code");
 

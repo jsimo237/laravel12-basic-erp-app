@@ -52,29 +52,32 @@ return new class extends Migration {
             $setUpdatedByColumnName = $authorable['created_by_column_name'] ?? true;
             $setCreatedByColumn = $authorable['updated_by_column_name'] ?? true;
 
-            if ($setCreatedByColumn){
-                Schema::whenTableDoesntHaveColumn($model->getTable(), $createdByColumnName,function (Blueprint $table) use ($createdByColumnName) {
-//                $table->addAuthorableColumns(true, User::class)
-//                    $table->unsignedBigInteger($createdByColumnName)->nullable()
-//                        ->comment("[FK] l'auteur de l'enrengistrement");
-
-                    $table->foreignIdFor(User::class,$createdByColumnName)->nullable()
-                        ->constrained((new User)->getTable(), (new User)->getKeyName(), uniqid("FK_"))
-                        ->cascadeOnUpdate()->cascadeOnDelete()
+            if ($setCreatedByColumn) {
+                Schema::whenTableDoesntHaveColumn($model->getTable(), $createdByColumnName, function (Blueprint $table) use ($createdByColumnName) {
+                    $table->uuid($createdByColumnName)->nullable()
                         ->comment("[FK] l'auteur de l'enrengistrement");
-                });
-            }
-            if ($setUpdatedByColumnName){
-                Schema::whenTableDoesntHaveColumn($model->getTable(), $updatedByColumnName,function (Blueprint $table) use ($updatedByColumnName) {
-//                    $table->unsignedBigInteger($updatedByColumnName)->nullable()
-//                        ->comment("[FK] l'auteur de la dernière modification");
 
-                    $table->foreignIdFor(User::class,$updatedByColumnName)->nullable()
-                        ->constrained((new User)->getTable(), (new User)->getKeyName(), uniqid("FK_"))
-                        ->cascadeOnUpdate()->cascadeOnDelete()
-                        ->comment("[FK] l'auteur de la dernière modification");
+                    $table->foreign($createdByColumnName, uniqid("FK_"))
+                        ->references((new User)->getKeyName())
+                        ->on((new User)->getTable())
+                        ->cascadeOnUpdate()
+                        ->cascadeOnDelete();
                 });
             }
+
+            if ($setUpdatedByColumnName) {
+                Schema::whenTableDoesntHaveColumn($model->getTable(), $updatedByColumnName, function (Blueprint $table) use ($updatedByColumnName) {
+                    $table->uuid($updatedByColumnName)->nullable()
+                        ->comment("[FK] l'auteur de la dernière modification");
+
+                    $table->foreign($updatedByColumnName, uniqid("FK_"))
+                        ->references((new User)->getKeyName())
+                        ->on((new User)->getTable())
+                        ->cascadeOnUpdate()
+                        ->cascadeOnDelete();
+                });
+            }
+
 
         }
     }

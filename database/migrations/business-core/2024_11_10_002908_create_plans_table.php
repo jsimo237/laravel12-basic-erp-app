@@ -4,7 +4,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SubscriptionsManagement\Models\Plan;
+use App\Modules\SubscriptionsManagement\Models\Plan;
 
 return new class extends Migration
 {
@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void{
         Schema::create((new Plan)->getTable(), function (Blueprint $table) {
-            $table->id();
+           $table->uuid('id')->primary();
 
             $table->string("title",100);
             $table->text("description")->nullable();

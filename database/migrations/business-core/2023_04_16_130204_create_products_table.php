@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Product;
+use App\Modules\SalesManagement\Models\Product;
 
 return new class extends Migration
 {
@@ -16,7 +16,7 @@ return new class extends Migration
     {
         if(!Schema::hasTable((new Product)->getTable())){
             Schema::create((new Product)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
 
                 $table->string('sku',60)->nullable(false);
                 $table->string('name');

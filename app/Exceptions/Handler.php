@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirago\BusinessCore\Exceptions;
+namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

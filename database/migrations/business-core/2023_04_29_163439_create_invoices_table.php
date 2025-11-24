@@ -3,10 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Invoice;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Order;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\BillingInformations;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\InvoiceStatuses;
+use App\Modules\SalesManagement\Models\Invoice;
+use App\Modules\SalesManagement\Models\Order;
+use App\Modules\SalesManagement\Constants\BillingInformations;
+use App\Modules\SalesManagement\Constants\InvoiceStatuses;
 
 return new class extends Migration
 {
@@ -19,11 +19,11 @@ return new class extends Migration
     {
 
         Schema::create((new Invoice)->getTable(), function (Blueprint $table) {
-            $table->id();
+           $table->uuid('id')->primary();
 
             $table->string('code',60)
                 ->unique(uniqid("UQ_"));
-            
+
             $table->json('discounts')->nullable();
 
             $table->text('note')->nullable();
@@ -39,9 +39,9 @@ return new class extends Migration
             $table->string('billing_address',100)->nullable();
             $table->string('billing_email',100)->nullable();
 
-            $table->nullableUlidMorphs('recipient');
+            $table->nullableUuidMorphs('recipient');
 
-            $table->string("status",50)->default(InvoiceStatuses::CREATED->value)
+            $table->string("status",50)->default(InvoiceStatuses::DRAFT->value)
                   ->comment("Le statut");
 
             $table->timestamp('expired_at')->nullable();

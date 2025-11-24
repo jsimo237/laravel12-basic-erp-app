@@ -3,8 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
-use Kirago\BusinessCore\Modules\CoresManagement\Models\Currency;
-use Kirago\BusinessCore\Modules\SecurityManagement\Models\User;
+use App\Modules\CoresManagement\Models\Currency;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration  {
     /**
@@ -16,7 +16,7 @@ return new class extends Migration  {
         if(!Schema::hasTable((new Currency)->getTable())){
                 Schema::create((new Currency)->getTable(), function (Blueprint $table) {
 
-                  //  $table->id();
+                  // $table->uuid('id')->primary();
 
                     $table->string("code",10)->primary(uniqid("PK_"));
 

@@ -4,9 +4,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Order;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\BillingInformations;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\OrderStatuses;
+use App\Modules\SalesManagement\Models\Order;
+use App\Modules\SalesManagement\Constants\BillingInformations;
+use App\Modules\SalesManagement\Constants\OrderStatuses;
 
 return new class extends Migration
 {
@@ -19,7 +19,7 @@ return new class extends Migration
     {
         if(!Schema::hasTable((new Order)->getTable())){
         Schema::create((new Order)->getTable(), function (Blueprint $table) {
-            $table->id();
+           $table->uuid('id')->primary();
             $table->string('code',60)
                 ->unique(uniqid("UQ_"));
 
@@ -43,7 +43,7 @@ return new class extends Migration
 
             $table->timestamp('expired_at')->nullable();
             $table->timestamp('processed_at')->nullable();
-            $table->nullableUlidMorphs('recipient');
+            $table->nullableUuidMorphs('recipient');
 
 
             $table->timestamps();

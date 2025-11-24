@@ -1,11 +1,10 @@
 <?php
 
+use App\Modules\SubscriptionsManagement\Constants\SubscriptionStatuses;
+use App\Modules\SubscriptionsManagement\Models\Subscription;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SubscriptionsManagement\Constants\SubscriptionStatuses;
-use Kirago\BusinessCore\Modules\SubscriptionsManagement\Models\Package;
-use Kirago\BusinessCore\Modules\SubscriptionsManagement\Models\Subscription;
 
 return new class extends Migration
 {
@@ -14,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void{
         Schema::create((new Subscription)->getTable(), function (Blueprint $table) {
-            $table->id();
+           $table->uuid('id')->primary();
 
             $table->string("reference",100)
                 ->unique(uniqid("UQ_"))
@@ -29,11 +28,6 @@ return new class extends Migration
                // ->storedAs('start_at <= CURRENT_TIMESTAMP AND end_at >= CURRENT_TIMESTAMP')
             ;
 
-            $table->foreignIdFor(Package::class,"package_id")
-                ->constrained((new Package)->getTable(), (new Package)->getKeyName(), uniqid("FK_"))
-                ->cascadeOnUpdate()->cascadeOnDelete()
-                ->comment("[FK] le package");
-
             $table->string("status",50)->default(SubscriptionStatuses::INITIATED->value)
                 ->comment("Le statut");
 
@@ -43,7 +37,8 @@ return new class extends Migration
             $table->timestamp('completed_at')->nullable()
                 ->comment("La date de confirmation");
 
-            $table->nullableUlidMorphs('subscriber',uniqid("INDX_"));
+            $table->nullableUuidMorphs('subscriber',uniqid("POLY_INDEX_"));
+            $table->nullableUuidMorphs('item',uniqid("POLY_INDEX_"));
 
             $table->timestamps();
             $table->softDeletes();

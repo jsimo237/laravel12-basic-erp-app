@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Customer;
+use App\Modules\SalesManagement\Models\Customer;
 
 return new class extends Migration {
 
@@ -11,7 +11,7 @@ return new class extends Migration {
 
         if(!Schema::hasTable((new Customer)->getTable())){
             Schema::create((new Customer)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
 
                 $table->string('firstname',100)
                     ->comment("Le nom");

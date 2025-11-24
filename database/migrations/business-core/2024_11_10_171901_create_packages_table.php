@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SubscriptionsManagement\Models\Package;
-use Kirago\BusinessCore\Modules\SubscriptionsManagement\Models\Plan;
+use App\Modules\SubscriptionsManagement\Models\Package;
+use App\Modules\SubscriptionsManagement\Models\Plan;
 
 return new class extends Migration
 {
@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create((new Package)->getTable(), function (Blueprint $table) {
 
-            $table->id();
+           $table->uuid('id')->primary();
 
             $table->string("name")->comment("Le nom");
             $table->bigInteger("count_days")->nullable()

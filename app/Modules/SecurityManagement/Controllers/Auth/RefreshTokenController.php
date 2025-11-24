@@ -2,9 +2,9 @@
 
 namespace App\Modules\SecurityManagement\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class RefreshTokenController extends Controller

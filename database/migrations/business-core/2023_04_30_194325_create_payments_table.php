@@ -3,11 +3,11 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Invoice;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Payment;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\PaymentSource;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\PaymentStatuses;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\PaymentCategroies;
+use App\Modules\SalesManagement\Models\Invoice;
+use App\Modules\SalesManagement\Models\Payment;
+use App\Modules\SalesManagement\Constants\PaymentSource;
+use App\Modules\SalesManagement\Constants\PaymentStatuses;
+use App\Modules\SalesManagement\Constants\PaymentCategroies;
 
 return new class extends Migration
 {
@@ -19,7 +19,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create((new Payment)->getTable(), function (Blueprint $table) {
-            $table->id();
+           $table->uuid('id')->primary();
             $table->string('code',50)->unique(uniqid("UQ_"));
 
             $table->string('source_code',100)->default(PaymentSource::UNKNOWN->value);

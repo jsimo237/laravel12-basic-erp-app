@@ -3,7 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\ContactForm;
+use App\Modules\OrganizationManagement\Models\ContactForm;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     /**
@@ -14,7 +15,7 @@ return new class extends Migration {
     public function up(){
         if(!Schema::hasTable((new ContactForm)->getTable())){
             Schema::create((new ContactForm)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
                 $table->string('name')
                     ->comment("Le nom de l'expéditeur");
                 $table->string('email')->nullable()

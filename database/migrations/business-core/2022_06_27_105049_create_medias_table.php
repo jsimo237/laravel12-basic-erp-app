@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\CoresManagement\Models\Media;
-
+use App\Modules\CoresManagement\Models\Media;
 
 return new class extends Migration {
 
@@ -14,7 +13,7 @@ return new class extends Migration {
 
                 $table->bigIncrements('id');
 
-               $table->nullableUlidMorphs("model");
+                $table->nullableUuidMorphs("model");
                 $table->uuid('uuid')->nullable()->unique();
                 $table->string('collection_name');
                 $table->string('name');

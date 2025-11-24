@@ -3,7 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\Staff;
+use App\Modules\OrganizationManagement\Models\Staff;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
 
@@ -11,7 +12,7 @@ return new class extends Migration {
 
         if(!Schema::hasTable((new Staff)->getTable())){
             Schema::create((new Staff)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
 
                 $table->string('firstname',100)
                     ->comment("Le nom");

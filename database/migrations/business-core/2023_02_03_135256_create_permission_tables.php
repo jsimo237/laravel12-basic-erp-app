@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SecurityManagement\Models\User;
+use App\Modules\SecurityManagement\Models\User;
 use Spatie\Permission\PermissionRegistrar;
 
 return new class extends Migration {
@@ -46,6 +46,7 @@ return new class extends Migration {
                 $table->unique(['name', 'guard_name'],uniqid("UQ_"));
             });
         }
+
         if(!Schema::hasTable($tableNames['roles'])){
             Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
                 $table->bigIncrements('id'); // role id
@@ -75,76 +76,91 @@ return new class extends Migration {
 
         if(!Schema::hasTable($tableNames['model_has_permissions'])) {
             Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $teams, $pivotPermission) {
+                // Le pivotPermission pointe maintenant sur uuid
                 $table->unsignedBigInteger($pivotPermission);
 
                 $table->string('model_type',125);
-                //$table->unsignedBigInteger($columnNames['model_morph_key']);
                 $table->string($columnNames['model_morph_key'],100);
                 $table->index([$columnNames['model_morph_key'], 'model_type'], uniqid("IDX_"));
 
                 $table->foreign($pivotPermission)
-                    ->references('id') // permission id
+                    ->references('id')
                     ->on($tableNames['permissions'])
                     ->onDelete('cascade');
+
                 if ($teams) {
-                    $table->unsignedBigInteger($columnNames['team_foreign_key']);
+                    // La colonne team_foreign_key doit aussi être uuid
+                    $table->uuid($columnNames['team_foreign_key']);
                     $table->index($columnNames['team_foreign_key'], uniqid("IDX_"));
 
-                    $table->primary([$columnNames['team_foreign_key'], $pivotPermission, $columnNames['model_morph_key'], 'model_type'],
-                        uniqid("IDX_"));
+                    $table->primary([
+                        $columnNames['team_foreign_key'],
+                        $pivotPermission,
+                        $columnNames['model_morph_key'],
+                        'model_type'
+                    ], uniqid("IDX_"));
                 } else {
-                    $table->primary([$pivotPermission, $columnNames['model_morph_key'], 'model_type'],
-                        uniqid("IDX_"));
+                    $table->primary([
+                        $pivotPermission,
+                        $columnNames['model_morph_key'],
+                        'model_type'
+                    ], uniqid("IDX_"));
                 }
-
             });
         }
 
         if(!Schema::hasTable($tableNames['model_has_roles'])) {
-            Schema::create($tableNames['model_has_roles'], function (Blueprint $table)
-            use ($tableNames, $columnNames, $teams, $pivotRole) {
+            Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $teams, $pivotRole) {
                 $table->unsignedBigInteger($pivotRole);
 
                 $table->string('model_type',125);
-                //$table->unsignedBigInteger($columnNames['model_morph_key']);
                 $table->string($columnNames['model_morph_key'],100);
                 $table->index([$columnNames['model_morph_key'], 'model_type'], uniqid("IDX_"));
 
                 $table->foreign($pivotRole)
-                    ->references('id') // role id
+                    ->references('id')
                     ->on($tableNames['roles'])
                     ->onDelete('cascade');
+
                 if ($teams) {
-                    $table->unsignedBigInteger($columnNames['team_foreign_key']);
+                    $table->uuid($columnNames['team_foreign_key']);
                     $table->index($columnNames['team_foreign_key'], uniqid("IDX_"));
 
-                    $table->primary([$columnNames['team_foreign_key'], $pivotRole, $columnNames['model_morph_key'], 'model_type'],
-                        uniqid("PK_"));
+                    $table->primary([
+                        $columnNames['team_foreign_key'],
+                        $pivotRole,
+                        $columnNames['model_morph_key'],
+                        'model_type'
+                    ], uniqid("PK_"));
                 } else {
-                    $table->primary([$pivotRole, $columnNames['model_morph_key'], 'model_type'],
-                        uniqid("PQ_"));
+                    $table->primary([
+                        $pivotRole,
+                        $columnNames['model_morph_key'],
+                        'model_type'
+                    ], uniqid("PK_"));
                 }
             });
         }
+
         if(!Schema::hasTable($tableNames['role_has_permissions'])) {
             Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames, $pivotRole, $pivotPermission) {
                 $table->unsignedBigInteger($pivotPermission);
                 $table->unsignedBigInteger($pivotRole);
 
                 $table->foreign($pivotPermission)
-                    ->references('id') // permission id
+                    ->references('id')
                     ->on($tableNames['permissions'])
                     ->onDelete('cascade');
 
                 $table->foreign($pivotRole)
-                    ->references('id') // role id
+                    ->references('id')
                     ->on($tableNames['roles'])
                     ->onDelete('cascade');
 
-                $table->primary([$pivotPermission, $pivotRole],
-                    uniqid("PK_"));
+                $table->primary([$pivotPermission, $pivotRole], uniqid("PK_"));
             });
         }
+
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));

@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\Organization;
-use Kirago\BusinessCore\Modules\SecurityManagement\Models\OtpCode;
+use App\Modules\OrganizationManagement\Models\Organization;
+use App\Modules\SecurityManagement\Models\OtpCode;
 
 return new class extends Migration
 {
@@ -16,18 +16,17 @@ return new class extends Migration
         Schema::create((new OtpCode)->getTable(), function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->ulidMorphs('identifier');
+            $table->nullableUuidMorphs('identifier');
             $table->timestamp('expired_at');
 
-            $table->foreignIdFor(Organization::class,"organization_id")->nullable()
+            $table->foreignIdFor(Organization::class,"organization_id")
+                ->nullable()
                 ->constrained((new Organization)->getTable(), (new Organization)->getKeyName(), uniqid("FK_"))
                 ->cascadeOnUpdate()->cascadeOnDelete()
-                ->comment("[FK] l'orgasation");
-
+                ->comment("[FK] l'organisation");
 
             $table->timestamps();
             $table->softDeletes();
-
 
             $table->unique(['code',"organization_id"],uniqid('UQ_'));
         });

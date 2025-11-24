@@ -4,10 +4,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\Organization;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\Setting;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Product;
-use Kirago\BusinessCore\Modules\SecurityManagement\Models\User;
+use App\Modules\OrganizationManagement\Models\Organization;
+use App\Modules\OrganizationManagement\Models\Setting;
+use App\Modules\SalesManagement\Models\Product;
+use App\Modules\SecurityManagement\Models\User;
 
 return new class extends Migration {
 

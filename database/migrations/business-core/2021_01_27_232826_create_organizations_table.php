@@ -3,9 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\OrganizationManagement\Models\Organization;
-use Kirago\BusinessCore\Modules\SecurityManagement\Models\User;
-use Kirago\BusinessCore\Modules\SalesManagement\Constants\BillingInformations;
+use App\Modules\OrganizationManagement\Models\Organization;
+use App\Modules\SecurityManagement\Models\User;
+use App\Modules\SalesManagement\Constants\BillingInformations;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -15,10 +16,16 @@ return new class extends Migration
      * @return void
      */
     public function up(){
+        /**
+         * UUID_TO_BIN(UUID(), true) → convertit l’UUID en binaire ordonné,
+         * ce qui améliore la fragmentation des index.
+         * Ensuite on pourra convertir côté Laravel avec bin2uuid()
+         * si nécessaire pour l’affichage
+         */
 
         if (!Schema::hasTable((new Organization)->getTable())){
             Schema::create((new Organization)->getTable(), function (Blueprint $table) {
-                $table->id();
+               $table->uuid('id')->primary();
                 $table->string('name')
                     ->comment("Le nom");
 

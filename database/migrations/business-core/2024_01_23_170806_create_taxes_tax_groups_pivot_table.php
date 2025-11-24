@@ -3,9 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\Tax;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\TaxGroup;
-use Kirago\BusinessCore\Modules\SalesManagement\Models\TaxHasGroup;
+use App\Modules\SalesManagement\Models\Tax;
+use App\Modules\SalesManagement\Models\TaxGroup;
+use App\Modules\SalesManagement\Models\TaxHasGroup;
 
 return new class extends Migration
 {
@@ -17,8 +17,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create((new TaxHasGroup)->getTable(), function (Blueprint $table) {
-            $table->id();
-
+         //  $table->uuid('id')->primary();
+           $table->id();
 
             $table->foreignIdFor(Tax::class,'tax_id')
                 ->constrained((new Tax)->getTable(), (new Tax)->getKeyName(), uniqid("FK_"))
